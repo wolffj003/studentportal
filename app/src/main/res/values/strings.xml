@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StudentPortal</string>
+
+    <string name="etTitleHint">Title</string>
+    <string name="etURLHint">URL</string>
+    <string name="btnConfirm">Confirm</string>
 </resources>
