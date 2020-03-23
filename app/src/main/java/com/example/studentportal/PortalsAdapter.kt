@@ -15,7 +15,7 @@ class PortalsAdapter(
         fun bind(portal: Portal, clickListener: (Portal) -> Unit) {
             itemView.portal_title.text = portal.titleText
             itemView.portal_url.text = portal.urlText
-            itemView.setOnClickListener { clickListener(portal)}
+            itemView.setOnClickListener { clickListener(portal) }
         }
     }
 

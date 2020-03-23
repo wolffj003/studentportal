@@ -2,9 +2,14 @@ package com.example.studentportal
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.webkit.URLUtil
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        createItemTouchHelper().attachToRecyclerView(rvPortals)
+
         viewManager = LinearLayoutManager(this)
         viewAdapter = PortalsAdapter(portals, { portal : Portal -> portalClicked(portal) })
 
@@ -44,7 +51,17 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun portalClicked(portal: Portal) {
-        Toast.makeText(this, "Clicked: ${portal.titleText}", Toast.LENGTH_SHORT).show()
+        if (URLUtil.isValidUrl(portal.urlText))
+            launchCustomTab(portal.urlText)  // TODO Check if url is right format
+        else Toast.makeText(this, getString(R.string.invalidURL), Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun launchCustomTab(url: String) {
+        val builder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+        val customTabsIntent: CustomTabsIntent = builder.build()
+
+        customTabsIntent.launchUrl(this, Uri.parse(url))
     }
 
 
@@ -66,5 +83,25 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+
+    private fun createItemTouchHelper(): ItemTouchHelper {
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                portals.removeAt(position)
+                viewAdapter.notifyDataSetChanged()
+            }
+        }
+        return ItemTouchHelper(callback)
     }
 }

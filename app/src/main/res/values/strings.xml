@@ -4,4 +4,6 @@
     <string name="etTitleHint">Title</string>
     <string name="etURLHint">URL</string>
     <string name="btnConfirm">Confirm</string>
+
+    <string name="invalidURL">The URL is not valid…</string>
 </resources>
