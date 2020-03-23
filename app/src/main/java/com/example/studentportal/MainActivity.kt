@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun portalClicked(portal: Portal) {
         if (URLUtil.isValidUrl(portal.urlText))
-            launchCustomTab(portal.urlText)  // TODO Check if url is right format
+            launchCustomTab(portal.urlText)
         else Toast.makeText(this, getString(R.string.invalidURL), Toast.LENGTH_SHORT).show()
     }
 
