@@ -6,13 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.card_portal.view.*
 
-class PortalsAdapter(private val reminders: ArrayList<Portal>) :
+class PortalsAdapter(
+    private val reminders: ArrayList<Portal>,
+    val clickListener: (Portal) -> Unit) :
     RecyclerView.Adapter<PortalsAdapter.ViewHolderCard>() {
 
     class ViewHolderCard(cardViewText: View) : RecyclerView.ViewHolder(cardViewText) {
-        fun bind(portal: Portal) {
+        fun bind(portal: Portal, clickListener: (Portal) -> Unit) {
             itemView.portal_title.text = portal.titleText
             itemView.portal_url.text = portal.urlText
+            itemView.setOnClickListener { clickListener(portal)}
         }
     }
 
@@ -26,7 +29,7 @@ class PortalsAdapter(private val reminders: ArrayList<Portal>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolderCard, position: Int) {
-        holder.bind(reminders[position])
+        holder.bind(reminders[position], clickListener)
     }
 
     override fun getItemCount(): Int {

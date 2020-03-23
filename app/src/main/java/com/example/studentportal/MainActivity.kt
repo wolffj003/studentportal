@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,13 +26,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = PortalsAdapter(portals)
+        viewAdapter = PortalsAdapter(portals, { portal : Portal -> portalClicked(portal) })
 
         recyclerView = findViewById<RecyclerView>(R.id.rvPortals).apply {
             setHasFixedSize(true)   // Performance tweak
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        initViews() // TODO: Terugknoppie fixen
     }
 
 
@@ -40,10 +43,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun portalClicked(portal: Portal) {
+        Toast.makeText(this, "Clicked: ${portal.titleText}", Toast.LENGTH_SHORT).show()
+    }
+
+
     private fun onAddPortalClick() {
         val intent = Intent(this, AddPortal::class.java)
         startActivityForResult(intent, ADD_REMINDER_REQUEST_CODE)
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -58,5 +67,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }
